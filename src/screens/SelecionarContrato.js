@@ -1,18 +1,26 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 const SelecionarContrato = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Pagamento</Text>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={24} color="black" />
+        </TouchableOpacity>
+        <Text style={styles.title}>Pagamento</Text>
+      </View>
+
       <Text style={styles.subtitle}>Selecione seu contrato</Text>
 
       <TouchableOpacity
+
         style={styles.option}
         onPress={() => navigation.navigate('EscolherPagamento', { contrato: '12 meses' })}
       >
         <Text style={styles.optionText}>Contrato de 12 meses</Text>
-        <Text style={styles.optionSubText}>12</Text>
+        <Text style={styles.optionTextTwo}> 12 </Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -20,7 +28,7 @@ const SelecionarContrato = ({ navigation }) => {
         onPress={() => navigation.navigate('EscolherPagamento', { contrato: '6 meses' })}
       >
         <Text style={styles.optionText}>Contrato de 6 meses</Text>
-        <Text style={styles.optionSubText}>6</Text>
+        <Text style={styles.optionTextTwo}> 6 </Text>
       </TouchableOpacity>
     </View>
   );
@@ -30,38 +38,44 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f0f4ff',
+    backgroundColor: '#FFFEFE',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: 25,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
+    color: '#333',
+    marginLeft: 25,
   },
   subtitle: {
-    fontSize: 18,
-    marginBottom: 40,
+    marginBottom: 25,
+    fontWeight: '500',
+    color: '#8F8F8F',
   },
   option: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
+    backgroundColor: '#FFF',
+    padding: 30,
+    borderRadius: 20,
+    marginBottom: 45,
+    elevation: 15,
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
+    
   },
   optionText: {
-    fontSize: 18,
+    fontSize: 20,
+    fontWeight: 'bold',
     color: '#333',
+    marginRight: 70,
   },
-  optionSubText: {
-    fontSize: 18,
-    color: '#fbc02d',
+  optionTextTwo:{
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#FFD942',
   },
 });
 

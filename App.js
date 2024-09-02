@@ -12,7 +12,7 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="SelecionarContrato">
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="SelecionarContrato" component={SelecionarContrato} options={{ title: 'Pagamento' }} />
         <Stack.Screen name="EscolherPagamento" component={EscolherPagamento} options={{ title: 'Contrato' }} />
         <Stack.Screen name="InserirDadosPagamento" component={InserirDadosPagamento} options={{ title: 'Pagamento' }} />
