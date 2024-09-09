@@ -40,8 +40,8 @@ const EscolherPagamento = ({ route, navigation }) => {
 
       {/* Navegação para a página PixPagamento */}
       <TouchableOpacity
+        onPress={() => navigation.navigate('PagamentoPix')}
         style={styles.option}
-        onPress={() => navigation.navigate('PixPagamento', { contrato })}
       >
         <Image
           source={require('./assets/pix.png')}
@@ -49,6 +49,7 @@ const EscolherPagamento = ({ route, navigation }) => {
         />
         <Text style={styles.optionText}>Transferência Pix</Text>
       </TouchableOpacity>
+
 
       <TouchableOpacity
         style={styles.addOption}
