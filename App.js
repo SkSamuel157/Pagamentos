@@ -7,6 +7,7 @@ import EscolherPagamento from './src/screens/EscolherPagamento';
 import InserirDadosPagamento from './src/screens/InserirDadosPagamento';
 import Concluido from './src/screens/Concluido';
 
+
 const Stack = createStackNavigator();
 
 export default function App() {

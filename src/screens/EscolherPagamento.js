@@ -24,7 +24,6 @@ const EscolherPagamento = ({ route, navigation }) => {
           source={require('./assets/credito.png')}
           style={styles.optionImage}
         />
-
         <Text style={styles.optionText}>Cartão de Crédito</Text>
       </TouchableOpacity>
 
@@ -36,20 +35,18 @@ const EscolherPagamento = ({ route, navigation }) => {
           source={require('./assets/debito.png')}
           style={styles.optionImage}
         />
-
         <Text style={styles.optionText}>Cartão de Débito</Text>
       </TouchableOpacity>
 
+      {/* Navegação para a página PixPagamento */}
       <TouchableOpacity
         style={styles.option}
-        onPress={() => navigation.navigate('InserirDadosPagamento', { contrato, metodo: 'Pix' })}
+        onPress={() => navigation.navigate('PixPagamento', { contrato })}
       >
-
         <Image
           source={require('./assets/pix.png')}
           style={styles.optionImage}
         />
-
         <Text style={styles.optionText}>Transferência Pix</Text>
       </TouchableOpacity>
 
@@ -66,8 +63,8 @@ const EscolherPagamento = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#F3F4F6',
+    padding: 25,
+    backgroundColor: '#fff',
   },
   header: {
     flexDirection: 'row',
