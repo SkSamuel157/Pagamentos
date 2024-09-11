@@ -1,9 +1,53 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { collection, addDoc } from 'firebase/firestore'; // Importa o Firestore
+import { db } from '../../firebaseConfig';
 
 const InserirDadosPagamento = ({ route, navigation }) => {
   const { contrato } = route.params;
+
+  // Estados para armazenar os dados do formulário
+  const [nomeCartao, setNomeCartao] = useState('');
+  const [numeroCartao, setNumeroCartao] = useState('');
+  const [dataValidade, setDataValidade] = useState('');
+  const [cvc, setCvc] = useState('');
+  const [salvarCartao, setSalvarCartao] = useState(false); // Estado para o ícone de salvar cartão
+
+  // Função para salvar o pagamento no Firestore
+  const concluirPagamento = async () => {
+    if (!nomeCartao || !numeroCartao || !dataValidade || !cvc) {
+      console.log("Por favor, preencha todos os campos!");
+      return;
+    }
+
+    try {
+      // Adiciona os dados do pagamento no Firestore
+      await addDoc(collection(db, "pagamentos"), {
+        nome: nomeCartao,
+        numero: numeroCartao,
+        validade: dataValidade,
+        cvc: cvc,
+        valor: '250', // Ajuste para pegar o valor correto, se necessário
+        status: 'pago'
+      });
+
+      // Se o usuário selecionar "Salvar este cartão", salva também os dados do cartão separadamente
+      if (salvarCartao) {
+        await addDoc(collection(db, "cartoesSalvos"), {
+          nome: nomeCartao,
+          numero: numeroCartao,
+          validade: dataValidade,
+          cvc: cvc
+        });
+      }
+
+      // Navega para a tela de Concluído após salvar
+      navigation.navigate('Concluido');
+    } catch (e) {
+      console.error("Erro ao salvar pagamento: ", e);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -16,17 +60,19 @@ const InserirDadosPagamento = ({ route, navigation }) => {
 
       <Text style={styles.subtitle}>Insira seus dados</Text>
 
-      {/* Nome do cartão (deixa como estava) */}
+      {/* Nome do cartão */}
       <View style={styles.inputContainer}>
         <Ionicons name="person" size={20} color="#999" style={styles.icon} />
         <TextInput
           style={styles.input}
           placeholder="Nome do cartão"
           placeholderTextColor="#999"
+          value={nomeCartao}
+          onChangeText={setNomeCartao}
         />
       </View>
 
-      {/* Número do cartão (deixa como estava) */}
+      {/* Número do cartão */}
       <View style={styles.inputContainer}>
         <Ionicons name="card" size={20} color="#999" style={styles.icon} />
         <TextInput
@@ -34,6 +80,8 @@ const InserirDadosPagamento = ({ route, navigation }) => {
           placeholder="Número do cartão"
           keyboardType="numeric"
           placeholderTextColor="#999"
+          value={numeroCartao}
+          onChangeText={setNumeroCartao}
         />
       </View>
 
@@ -45,6 +93,8 @@ const InserirDadosPagamento = ({ route, navigation }) => {
             style={styles.smallInput}
             placeholder="MM/AA"
             placeholderTextColor="#999"
+            value={dataValidade}
+            onChangeText={setDataValidade}
           />
         </View>
 
@@ -55,21 +105,29 @@ const InserirDadosPagamento = ({ route, navigation }) => {
             placeholder="CVC"
             keyboardType="numeric"
             placeholderTextColor="#999"
+            value={cvc}
+            onChangeText={setCvc}
           />
         </View>
       </View>
 
+      {/* Ícone para salvar o cartão */}
       <TouchableOpacity
         style={styles.saveOption}
-        onPress={() => alert('Salvar este cartão')}
+        onPress={() => setSalvarCartao(!salvarCartao)} // Alterna entre salvar ou não salvar o cartão
       >
-        {/* <Ionicons name="md-save" size={20} color="#1E90FF" /> */}
+        <Ionicons
+          name={salvarCartao ? "checkbox" : "square-outline"} // Alterna entre um ícone marcado e desmarcado
+          size={24}
+          color="#1E90FF"
+        />
         <Text style={styles.saveOptionText}>Salvar este cartão</Text>
       </TouchableOpacity>
 
+      {/* Botão de Concluir */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('Concluido')}
+        onPress={concluirPagamento} // Chama a função ao concluir
       >
         <Text style={styles.buttonText}>Concluir</Text>
       </TouchableOpacity>
@@ -116,7 +174,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: '#999',
     borderWidth: 1,
-    marginBottom: 15, // Mantém os inputs independentes
+    marginBottom: 15, 
   },
   smallInputContainer: {
     flexDirection: 'row',
@@ -125,7 +183,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: '#999',
     borderWidth: 1,
-    width: '48%', // Ajuste para reduzir o tamanho
+    width: '48%',
   },
   icon: {
     padding: 15,
@@ -147,21 +205,20 @@ const styles = StyleSheet.create({
   },
   saveOptionText: {
     fontSize: 16,
-    color: '#1E90FF',
+    color: '#999',
     marginLeft: 10,
   },
   button: {
-    backgroundColor: '#FF2D94',
-    padding: 15,  
+    backgroundColor: '#FFD942',
+    padding: 15,
     borderRadius: 10,
     alignItems: 'center',
   },
   buttonText: {
-    fontSize: 25,  
+    fontSize: 25,
     fontWeight: 'bold',
     color: '#FFF',
   },
 });
-
 
 export default InserirDadosPagamento;
